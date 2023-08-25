@@ -24,7 +24,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET, You can get this form https://console.cloud.google.com/, to know more go on line 113 of this file.
       callbackURL: "/auth/google/callback",  //This means after sign-in on what route google should redirect
     },
-    (profile:any, cb:any) => {  //After successful sign-in, we have access of these thing which are in parameters
+    (accessToken:any, refreshToken:any, profile:any, cb:any) => {  //After successful sign-in, we have access of these thing which are in parameters
         // we are checking whether the user is already added to our database or not, if already exist we can directly give a callback age we can redirect the user to any page we are redirecting it on home page, this functionality is not written in this function, you can check line no. 72.
       dbpool.query(
         "select * from users where googleId = ?",
@@ -39,7 +39,7 @@ passport.use(
             // if user doesn't exist, we are adding the user to database
             dbpool.query(
               "insert into users set userName = ?, googleId = ?, userImg = ?, userEmail = ?",
-            [profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value],
+            [profile.displayName , profile.id, profile.photos[0].value, profile.emails[0].value],
               (err:any, userAdded:any) => {
                 if (err) {
                   console.log("err detected")

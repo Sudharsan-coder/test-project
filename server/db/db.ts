@@ -1,5 +1,7 @@
 //importing mysql package so the we can add our database credentials
-import mysql from 'mysql';
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
+dotenv.config();
 
 //Configuring credentials
 const dbpool = mysql.createPool({
@@ -12,4 +14,3 @@ const dbpool = mysql.createPool({
 
 //Exporting this file so that we can access this anywhere on our server by importing it.
 export default dbpool;
-// module.exports = db;
