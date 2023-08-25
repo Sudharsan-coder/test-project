@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import { useState, useEffect } from "react";
 import Axios from 'axios';
+import { BASE_URL } from "./constants";
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
   });
 
   useEffect(() => {
-    Axios.get("http://localhost:5000/auth/login/success", {
+    Axios.get(`${BASE_URL}/auth/login/success`, {
       withCredentials: true,
     })
       .then((res) => {
