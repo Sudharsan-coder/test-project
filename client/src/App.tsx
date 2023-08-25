@@ -1,9 +1,48 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import { useState, useEffect } from "react";
+import Axios from 'axios';
+
 function App() {
 
+  const [user, setUser] = useState({
+    userName:'',
+    userEmail:'',
+    userImg:''
+  });
+
+  useEffect(() => {
+    Axios.get("http://localhost:5000/auth/login/success", {
+      withCredentials: true,
+    })
+      .then((res) => {
+        if (res.status == 200) {
+          setUser({
+            userName: res.data.user[0],
+            userEmail: res.data.user[1],
+            userImg: res.data.user[2]
+          })
+        } else {
+          console.log("No status");
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const isLoggedIn = (user:{ userName:string }) => {
+    return user.userName.length > 0;
+  }
+
   return (
-    <>
-      <h1>Hello World</h1>
-    </>
+    <div className="app">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login/>} />
+          <Route path="/" element={isLoggedIn(user)?<Home user={user}/>:<Login/>} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 
