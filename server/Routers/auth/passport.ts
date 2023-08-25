@@ -3,7 +3,6 @@ const router = require("express").Router()
 const googleStrategy  = require("passport-google-oauth20").Strategy
 const passport = require("passport")
 const jwt = require("jsonwebtoken")
-const cookieSession = require("cookie-session")
 import dbpool from '../../db/db';
 
 //serializeUser determines which data of the user object should be stored in the session.
@@ -19,50 +18,49 @@ passport.deserializeUser((user:any, done:any) => {
 
 //Configuring google's strategy 
 passport.use(
-    new googleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,  //passing CLIENT ID
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET, You can get this form https://console.cloud.google.com/, to know more go on line 113 of this file.
-        callbackURL: "/auth/google/callback",  //This means after sign-in on what route google should redirect
-      },
-      (accessToken:any, refreshToken:any, profile:any, cb:any) => {  //After successful sign-in, we have access of these thing which are in parameters
-          // we are checking whether the user is already added to our database or not, if already exist we can directly give a callback age we can redirect the user to any page we are redirecting it on home page, this functionality is not written in this function, you can check line no. 72.
-        dbpool.query(
-          "select * from users where googleId = ?",
-          [profile.id],
-          (err:any, user:any) => {
-            if (err) {
-              cb(err, false);
-            }
-            if (!err && user.length != 0) {  // checking whether user exist or not
-              return cb(null, user);
-            } else {
-                // if user doesn't exist, we are adding the user to database
-              dbpool.query(
-                "insert into users set userName = ?, googleId = ?, userImg = ?, userEmail = ?",
-              [profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value],
-                (err:any, userAdded:any) => {
-                  if (err) {
-                    return cb(err, false);
-                    console.log("err detected")
-                  } else {
-                      dbpool.query(
-                          "select * from users where googleId = ?",
-                          [profile.id],
-                          (err:any, user:any) => {
-                              return cb(null, user);
-                              console.log("Login/Sign in successfully");
-  
-                          })
-                  }
-                }
-              );
-            }
+  new googleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,  //passing CLIENT ID
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET, //Passing CLIENT SECRET, You can get this form https://console.cloud.google.com/, to know more go on line 113 of this file.
+      callbackURL: "/auth/google/callback",  //This means after sign-in on what route google should redirect
+    },
+    (profile:any, cb:any) => {  //After successful sign-in, we have access of these thing which are in parameters
+        // we are checking whether the user is already added to our database or not, if already exist we can directly give a callback age we can redirect the user to any page we are redirecting it on home page, this functionality is not written in this function, you can check line no. 72.
+      dbpool.query(
+        "select * from users where googleId = ?",
+        [profile.id],
+        (err:any, user:any) => {
+          if (err) {
+            cb(err, false);
           }
-        );
-      }
-    )
-  );
+          if (!err && user.length != 0) {  // checking whether user exist or not
+            return cb(null, user);
+          } else {
+            // if user doesn't exist, we are adding the user to database
+            dbpool.query(
+              "insert into users set userName = ?, googleId = ?, userImg = ?, userEmail = ?",
+            [profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value],
+              (err:any, userAdded:any) => {
+                if (err) {
+                  console.log("err detected")
+                  return cb(err, false);
+                } else {
+                  dbpool.query(
+                    "select * from users where googleId = ?",
+                    [profile.id],
+                    (err:any, user:any) => {
+                      console.log("Login/Sign in successfully");
+                      return cb(null, user);
+                    })
+                }
+              }
+            );
+          }
+        }
+      );
+    }
+  )
+);
 
 
 // Passing google authenticate method as a middleware
@@ -70,7 +68,7 @@ router.get('/google', passport.authenticate('google', {
     scope: ['profile', "email"]
 }));
 
-// after sign-in the google will redirect to this route as we have added this route in callbace URL on line no 26
+// after sign-in the google will redirect to this route as we have added this route in callback URL on line no 26
 router.get("/google/callback", passport.authenticate("google",), (req:any, res:any) => {
     //If user exist than ...
     if(req.user){
