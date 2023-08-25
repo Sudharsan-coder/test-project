@@ -2,7 +2,7 @@
 import mysql from 'mysql';
 
 //Configuring credentials
-const db = mysql.createPool({
+const dbpool = mysql.createPool({
     connectionLimit: 360,
     host: "localhost",
     user: "root",
@@ -11,4 +11,5 @@ const db = mysql.createPool({
 });
 
 //Exporting this file so that we can access this anywhere on our server by importing it.
-export default db;
+export default dbpool;
+// module.exports = db;

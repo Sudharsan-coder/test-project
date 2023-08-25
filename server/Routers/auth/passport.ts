@@ -4,7 +4,7 @@ const googleStrategy  = require("passport-google-oauth20").Strategy
 const passport = require("passport")
 const jwt = require("jsonwebtoken")
 const cookieSession = require("cookie-session")
-const db = require("../../db/db")
+import dbpool from '../../db/db';
 
 //serializeUser determines which data of the user object should be stored in the session.
 passport.serializeUser((user:any, done:any) => {
@@ -27,7 +27,7 @@ passport.use(
       },
       (accessToken:any, refreshToken:any, profile:any, cb:any) => {  //After successful sign-in, we have access of these thing which are in parameters
           // we are checking whether the user is already added to our database or not, if already exist we can directly give a callback age we can redirect the user to any page we are redirecting it on home page, this functionality is not written in this function, you can check line no. 72.
-        db.query(
+        dbpool.query(
           "select * from users where googleId = ?",
           [profile.id],
           (err:any, user:any) => {
@@ -38,7 +38,7 @@ passport.use(
               return cb(null, user);
             } else {
                 // if user doesn't exist, we are adding the user to database
-              db.query(
+              dbpool.query(
                 "insert into users set userName = ?, googleId = ?, userImg = ?, userEmail = ?",
               [profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value],
                 (err:any, userAdded:any) => {
@@ -46,7 +46,7 @@ passport.use(
                     return cb(err, false);
                     console.log("err detected")
                   } else {
-                      db.query(
+                      dbpool.query(
                           "select * from users where googleId = ?",
                           [profile.id],
                           (err:any, user:any) => {
@@ -81,7 +81,7 @@ router.get("/google/callback", passport.authenticate("google",), (req:any, res:a
       // we are saying that create a cookie with a name of googleAuthToken and we are passing the token that we generated on line no 80, and the 3rd parameter is the expire of that cookie.
       res.cookie("googleAuthToken", googleAuthToken, {expires: new Date(Date.now() + 86400 * 1000), httpOnly: true})
         // we are now redirecting the user to localhost:3000 which is our frontend
-      res.redirect("http://localhost:3000")
+      res.redirect("http://localhost:5173")
     }
 });
 
