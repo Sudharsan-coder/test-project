@@ -5,9 +5,9 @@ import mysql from 'mysql';
 const dbpool = mysql.createPool({
     connectionLimit: 360,
     host: "localhost",
-    user: "root",
-    password: "Yokesh@mysql1",
-    database: "test_db"
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 //Exporting this file so that we can access this anywhere on our server by importing it.
