@@ -12,7 +12,7 @@ export default function Home({ user }:{ user:object }) {
   const logout = () => {
     Axios.get(`${BASE_URL}/auth/logout`, {withCredentials: true})
     .then( () => { // (res) =>
-      navigate('/signup');
+      navigate('/login');
     })
   }
 
