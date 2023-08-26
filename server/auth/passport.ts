@@ -33,7 +33,7 @@ passport.use(
         } else {
           userController.createUser(profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value).then((user: any) => {
               skillController.createSkill([], "", user.id).then(() => {
-                  ratingController.createRating(0, 0, 0, 0, 0, 0, "", user.id).then(() => {
+                  ratingController.createRating(0, 0, 0, 0, 0, user.id).then(() => {
                     console.log(`${user.userName} created successfully!\nSkills and Ratings created successfully!`);
                     return cb(null, user);
                   })
@@ -80,6 +80,7 @@ router.get("/login/success", (req:any, res:any) => {
 
 router.get("/logout", (req:any, res:any) => {
   req.logout();
+  res.clearCookie("authSession")
   res.clearCookie("googleAuthToken")
   res.json({
     logout: req.user
