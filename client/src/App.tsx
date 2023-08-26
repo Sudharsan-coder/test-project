@@ -39,8 +39,8 @@ function App() {
     <div className="app">
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home user={user}/>} />
           <Route path="/login" element={<Login/>} />
-          <Route path="/" element={isLoggedIn(user)?<Home user={user}/>:<Login/>} />
         </Routes>
       </BrowserRouter>
     </div>
