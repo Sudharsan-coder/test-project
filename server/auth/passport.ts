@@ -74,7 +74,6 @@ router.get("/login/success", (req:any, res:any) => {
       success: true,
       message: "successful",
       user: [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg]
-      user: [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg]
     });
   }
 });
