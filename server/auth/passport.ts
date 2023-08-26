@@ -73,7 +73,7 @@ router.get("/login/success", (req:any, res:any) => {
     res.status(200).json({
       success: true,
       message: "successful",
-      user: [req.user.userName, req.user.userEmail, req.user.userImg]
+      user: [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg]
     });
   }
 });
@@ -90,7 +90,7 @@ router.get('/logout', function(req:any,res:any){
   res.clearCookie('googleAuthToken');
   req.session.destroy(function (err:any) {
          res.redirect('/');
-     });
+  });
  });
 
 module.exports = router;
