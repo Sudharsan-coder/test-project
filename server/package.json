@@ -19,7 +19,8 @@
     "jsonwebtoken": "^9.0.1",
     "mysql2": "^3.6.0",
     "passport": "^0.5.3",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "sequelize": "^6.32.1"
   },
   "devDependencies": {
     "@types/cookie-session": "^2.0.44",
