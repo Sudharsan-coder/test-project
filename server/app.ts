@@ -1,4 +1,3 @@
-// Importing all required libraries
 import express from "express"
 import cors from "cors"
 import dbPool from "./db/db"
@@ -18,9 +17,8 @@ app.use(cookieSession({
     maxAge: 24*60*60*100
 }))
 
-// CORS - Cross Origin Resource Sharing, our Frontend will be running on different port (3000) and our Backend will run of 5000, it so how can frontend access backend, so we need to connect it, thats the reason we are using CORS.
 app.use(cors({
-    origin: "http://localhost:5173",  //only localhost:3000 can access this server
+    origin: "http://localhost:5173",
     credentials: true  
 }))
 
