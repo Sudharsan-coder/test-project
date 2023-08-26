@@ -33,7 +33,7 @@ passport.use(
         } else {
           userController.createUser(profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value).then((user: any) => {
               skillController.createSkill([], "", user.id).then(() => {
-                  ratingController.createRating(0, 0, 0, 0, 0, 0, "", user.id).then(() => {
+                  ratingController.createRating(0, 0, 0, 0, 0, user.id).then(() => {
                     console.log(`${user.userName} created successfully!\nSkills and Ratings created successfully!`);
                     return cb(null, user);
                   })
@@ -74,23 +74,18 @@ router.get("/login/success", (req:any, res:any) => {
       success: true,
       message: "successful",
       user: [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg]
+      user: [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg]
     });
   }
 });
 
-// router.get("/logout", (req:any, res:any) => {
-//   req.logout();
-//   res.json({
-//     logout: req.user
-//   })
-// });
-
-router.get('/logout', function(req:any,res:any){
-  req.logOut();
-  res.clearCookie('googleAuthToken');
-  req.session.destroy(function (err:any) {
-         res.redirect('/');
-  });
- });
+router.get("/logout", (req:any, res:any) => {
+  req.logout();
+  res.clearCookie("authSession")
+  res.clearCookie("googleAuthToken")
+  res.json({
+    logout: req.user
+  })
+});
 
 module.exports = router;

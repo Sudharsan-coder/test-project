@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cookieSession({
     name: 'authSession',
     keys: ["test-project_mark1@CodingMart$"],
-    maxAge: 24*60*60*100
+    maxAge: 30*60*100
 }))
 
 app.use(cors({
