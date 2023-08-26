@@ -8,8 +8,6 @@ const createRating = async (
     technicalExpertise:number,
     codingSkills:number,
     overAllScore:number,
-    weekNum:number,
-    year:string,
     userId:number | null
     ) => {
     const newRating = {
@@ -18,8 +16,6 @@ const createRating = async (
         technicalExpertise: technicalExpertise,
         codingSkills: codingSkills,
         overAllScore: overAllScore,
-        weekNum: weekNum,
-        year: year,
         userId: userId
     }
     return await Ratings.create(newRating)
