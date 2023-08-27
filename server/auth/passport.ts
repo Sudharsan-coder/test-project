@@ -1,6 +1,5 @@
-import userController from "../controllers/user.controller"
-import skillController from "../controllers/skills.controller"
-import ratingController from "../controllers/ratings.controller"
+import * as userController from "../controllers/user.controller"
+import * as skillController from "../controllers/skills.controller"
 
 const router = require("express").Router()
 const googleStrategy  = require("passport-google-oauth20").Strategy
@@ -25,7 +24,7 @@ passport.use(
       callbackURL: "/auth/google/callback",
     },
     (accessToken:any, refreshToken:any, profile:any, cb:any) => { 
-      userController.findById(profile.id)
+      userController.getUserByGoogleId(profile.id)
       .then((user: any) => {
         if (user.length !== 0) {
           console.log('Message From 49 Line Passport.ts');
@@ -64,10 +63,11 @@ router.get("/google/callback", passport.authenticate("google",), (req:any, res:a
 
 router.get("/login/success", async (req:any, res:any) => {
   if (req.user) {
+    console.log(req.user);
     res.status(200).json({
       success: true,
       message: "successful",
-      user: [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg]
+      user: req.user.length ? [req.user[0].userName, req.user[0].userEmail, req.user[0].userImg] : [req.user.userName, req.user.userEmail, req.user.userImg]
     });
   }
 });

@@ -10,19 +10,39 @@ const createRating = async (
     overAllScore:number,
     userId:number | null
     ) => {
-    const newRating = {
+    const result = await Ratings.create({
         teamPlay: teamPlay,
         attitude: attitude,
         technicalExpertise: technicalExpertise,
         codingSkills: codingSkills,
         overAllScore: overAllScore,
         userId: userId
-    }
-    return await Ratings.create(newRating)
+    });
+    return result;
 }
 
-const ratingController = {
-    createRating
+const getRatingByUserIdAndWeekNum = async (userId:number, weekNum:number) => {
+    const result = await Ratings.findOne({where: {userId: userId, weekNum: weekNum}});
+    return result;
 }
 
-export default ratingController;
+const updateRating = async (
+    teamPlay:number,
+    attitude:number,
+    technicalExpertise:number,
+    codingSkills:number,
+    overAllScore:number,
+    userId:number,
+    weekNum:number
+    ) => {
+    const result = await Ratings.update({
+        teamPlay: teamPlay,
+        attitude: attitude,
+        technicalExpertise: technicalExpertise,
+        codingSkills: codingSkills,
+        overAllScore: overAllScore
+    }, {where: {userId: userId, weekNum: weekNum}});
+    return result;
+}
+
+export { createRating, updateRating, getRatingByUserIdAndWeekNum };

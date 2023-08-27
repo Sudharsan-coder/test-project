@@ -13,8 +13,6 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json())
 
-const userRouter = require('./routes/user.router');
-app.use('/api/user', userRouter);
 
 app.use(cookieSession({
     name: 'authSession',
@@ -36,14 +34,23 @@ dbPool.getConnection((err:any,connection:any) => {
 })
 
 db.sequelize.sync({alter:true})
-    .then(()=> {
-        console.log("re-sync db");
+.then(()=> {
+    console.log("re-sync db");
 })
-    .catch((err:any) => {
-        console.log(`Failed To Sync Database: ${err}`);
+.catch((err:any) => {
+    console.log(`Failed To Sync Database: ${err}`);
 });
 
 app.use('/auth', require('./auth/passport'));
+
+const userRouter = require('./routes/user.router');
+app.use('/api/user', userRouter);
+
+const skillRouter = require('./routes/skill.router');
+app.use('/api/skill', skillRouter);
+
+const ratingRouter = require('./routes/rating.router');
+app.use('/api/rating', ratingRouter);
 
 app.listen(PORT, () =>{
     console.log(`Server running on port ${PORT}`)

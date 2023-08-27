@@ -24,46 +24,41 @@ const createUser = async (userName:string, googleId:string, userImg:string, user
     return newUser;
 }
 
-const findById = async (googleId:string) => {
-    if(!googleId){
-        return error({
-            status: 400,
-            message: 'User Not Found'
-        });
-    }
-    console.log('userFound');
-
-    const user = await Users.findAll({
-        where: {
-            googleId: googleId
-        }
-    })
-
-    return user;
-}
-
-const getAllUsers = async () => {
-    const result = await Users.findAll({
-        include: [{
-            model: table.Ratings,
-            as: 'ratings',
-        },
-        {
-            model: table.Skills,
-            as: 'skills'
-        }]
-    })
-    // console.log(JSON.stringify(result, null, 2));
+const getUserById = async ( userId: number ) => {
+    const result = await Users.findOne({
+        where: {id: userId}
+    });
+    console.log(JSON.stringify(result, null, 2));
     return result;
 }
 
-const userController = {
-    createUser,
-    findById,
-    getAllUsers
+const getUserByGoogleId = async ( googleId: string ) => {
+    const result = await Users.findOne({
+        where: {googleId: googleId}
+    });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+};
+
+const getAllUsers = async () => {
+    const result = await Users.findAll();
+    console.log(JSON.stringify(result, null, 2));
+    return result;
 }
 
-export default userController;
+const updateUser = async ( userId: number, userName: string, userImg: string, userEmail: string ) => {
+    const result = await Users.update({
+        userName: userName,
+        userImg: userImg,
+        userEmail: userEmail,
+    }, {
+        where: {id: userId}
+    });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+}
+
+export { getAllUsers, createUser, getUserById, getUserByGoogleId, updateUser };
 
 
 
