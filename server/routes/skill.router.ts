@@ -19,7 +19,7 @@ router.get('/:userId', async (req:any, res:any) => {
 
 router.post('/update', async (req:any, res:any) => {
     if( req.isAuthenticated()) {
-        const data = await skillController.updateSkillByUserId( req.body.skills, req.body.userId );
+        const data = await skillController.updateSkillByUserId( req.body.skills, req.body.phase , req.body.userId );
         res.status(200).json({
             status:200,
             message:'update skill by user id',

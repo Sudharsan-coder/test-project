@@ -12,8 +12,13 @@ const getSkillByUserId  = async (userId:number) => {
     return result;
 }
 
-const updateSkillByUserId = async (skills:Array<string>,userId:number) => {
-    const result = await Skills.update({skills: skills}, {where: {userId: userId}});
+const updateSkillByUserId = async (skills:Array<string>, phase:string ,userId:number) => {
+    const result = await Skills.update({
+        skills: skills,
+        phase: phase
+    }, {
+        where: {userId: userId}
+    });
     return result;
 }
 
