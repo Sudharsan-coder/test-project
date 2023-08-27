@@ -87,11 +87,12 @@ export default function Home({ user }:{ user:{ userName:string, userEmail:string
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
-                value="20Aug-26Aug[Current Week]"
+                defaultValue={34}
+                value={""}
                 label="Select Week"
                 onChange={()=>{}}
               >
-                <MenuItem value={"20Aug-26Aug[Current Week]"}>
+                <MenuItem value={34}>
                   20Aug-26Aug[Current Week]
                 </MenuItem>
               </Select>
