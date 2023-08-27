@@ -8,8 +8,8 @@ const router = require('express').Router();
 // router.get('/find', function (req:any, res:any) {
 //     userController.findById
 // });
-router.get('/all', function (req:any, res:any) {
-    if( req.isAuthenticated()) {
+router.get('/all', async (req:any, res:any) => {
+    if( req.user) {
         res.status(200).json({
             status:200,
             message:'get all users',
