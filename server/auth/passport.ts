@@ -25,26 +25,21 @@ passport.use(
       callbackURL: "/auth/google/callback",
     },
     (accessToken:any, refreshToken:any, profile:any, cb:any) => { 
-      userController.findUser(profile.id)
+      userController.findById(profile.id)
       .then((user: any) => {
         if (user.length !== 0) {
           console.log('Message From 49 Line Passport.ts');
           return cb(null, user);
         } else {
-          userController.createUser(profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value).then((user: any) => {
-              skillController.createSkill([], "", user.id).then(() => {
-                  ratingController.createRating(0, 0, 0, 0, 0, user.id).then(() => {
-                    console.log(`${user.userName} created successfully!\nSkills and Ratings created successfully!`);
-                    return cb(null, user);
-                  })
-                  .catch((err: any) => {
-                    return cb(err, false);
-                  });
-                })
-            })
-            .catch((err: any) => {
-              return cb(err, false);
-            });
+          userController.createUser(profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value)
+          .then((user: any) => {
+            skillController.createSkill([],user.id).then(() => {
+                return cb(null, user);
+              })
+          })
+          .catch((err: any) => {
+            return cb(err, false);
+          });
         }
       })
       .catch((err: any) => {
@@ -54,7 +49,6 @@ passport.use(
     }
   )
 );
-
 
 router.get('/google', passport.authenticate('google', {
   scope: ['profile', "email"]
@@ -68,7 +62,7 @@ router.get("/google/callback", passport.authenticate("google",), (req:any, res:a
   }
 });
 
-router.get("/login/success", (req:any, res:any) => {
+router.get("/login/success", async (req:any, res:any) => {
   if (req.user) {
     res.status(200).json({
       success: true,
