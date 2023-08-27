@@ -34,5 +34,20 @@ router.get('/:userId', async (req:any, res:any) => {
     }
 });
 
+router.get('/view/:weekNum', async (req:any, res:any) => {
+    if( req.isAuthenticated()) {
+        const data = await userController.getUserView( req.params.weekNum );
+        res.status(200).json({
+            status:200,
+            message:'get user view',
+            data: data
+        });
+    } else {
+        res.status(401).json({
+            status:401,
+            message:'Unauthorized'
+        });
+    }
+});
 
 module.exports = router;

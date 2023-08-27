@@ -1,5 +1,3 @@
-import * as utility from "../util";
-
 const ratingsModel = (sequelize:any, Sequelize:any) => {
     const Rating = sequelize.define("Rating", {
         id: {
@@ -29,11 +27,11 @@ const ratingsModel = (sequelize:any, Sequelize:any) => {
         },
         weekNum: {
             type: Sequelize.INTEGER,
-            defaultValue: utility.getWeekNumber(new Date())
+            defaultValue: 0
         },
         year: {
             type: Sequelize.STRING,
-            defaultValue: new Date().getFullYear().toString()
+            defaultValue: 0
         },
         createdAt:{
             type: Sequelize.DATE,

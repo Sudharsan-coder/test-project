@@ -1,5 +1,6 @@
-import * as userController from "../controllers/user.controller"
-import * as skillController from "../controllers/skills.controller"
+import * as usersController from "../controllers/user.controller"
+import * as skillsController from "../controllers/skills.controller"
+import * as ratingsController from "../controllers/ratings.controller"
 
 const router = require("express").Router()
 const googleStrategy  = require("passport-google-oauth20").Strategy
@@ -24,30 +25,39 @@ passport.use(
       callbackURL: "/auth/google/callback",
     },
     (accessToken:any, refreshToken:any, profile:any, cb:any) => { 
-      userController.getUserByGoogleId(profile.id)
+      usersController.getUserByGoogleId(profile.id)
       .then((user: any) => {
-        if (user.length !== 0) {
+        if (user) {
           console.log('Message From 49 Line Passport.ts');
           return cb(null, user);
         } else {
-          userController.createUser(profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value)
+          usersController.createUser(profile.displayName, profile.id, profile.photos[0].value, profile.emails[0].value)
           .then((user: any) => {
-            skillController.createSkill([],user.id).then(() => {
-                return cb(null, user);
+            console.log(`${user.userName} User Created Successfully`);
+            skillsController.createSkill([],user.id)
+            .then(() => {
+              console.log(`Skills For ${user.userName} Created Successfully`);
+              ratingsController.bulkCreateRating(0,0,0,0,0,user.id)
+              .then(() => {
+                  console.log(`Ratings For ${user.userName} Created Successfully For Next 6 Weeks`);
+                  return cb(null, user);
               })
-          })
-          .catch((err: any) => {
-            return cb(err, false);
-          });
-        }
-      })
-      .catch((err: any) => {
-        console.log('Message From 72 Line Passport.ts');
-        cb(err, false);
-      });
+              .catch((err: any) => {
+                return cb(err, false);
+              });
+            })
+            .catch((err: any) => {
+              return cb(err, false);
+            });
+        })
+        .catch((err: any) => {
+          console.log('There\'s A Problem In Creating User');
+          return cb(err, false);
+        });
     }
-  )
-);
+    });
+  }
+));
 
 router.get('/google', passport.authenticate('google', {
   scope: ['profile', "email"]

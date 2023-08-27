@@ -58,7 +58,23 @@ const updateUser = async ( userId: number, userName: string, userImg: string, us
     return result;
 }
 
-export { getAllUsers, createUser, getUserById, getUserByGoogleId, updateUser };
+const getUserView = async ( weekNum:number ) => {
+    const result = await Users.findAll({
+        include: [{
+            model: table.Ratings,
+            as: 'ratings',
+            where: {weekNum: weekNum}
+        },
+        {
+            model: table.Skills,
+            as: 'skills'
+        }]
+    });
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+}
+
+export { getAllUsers, createUser, getUserById, getUserByGoogleId, updateUser, getUserView };
 
 
 

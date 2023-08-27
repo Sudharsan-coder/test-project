@@ -1,6 +1,35 @@
+import * as utility from "../util";
+
 const table = require('../models');
 
 const Ratings = table.Ratings;
+
+const bulkCreateRating = async (
+    teamPlay:number,
+    attitude:number,
+    technicalExpertise:number,
+    codingSkills:number,
+    overAllScore:number,
+    userId:number
+    ) => {
+        const currentWeekNum = 32;
+
+        const nextWeeksNum = Array.from({length: 10},(i, index)=> currentWeekNum + index);
+
+        const ratingsData = new Array(10).fill(0).map( ( item, index) => ({
+            teamPlay: teamPlay,
+            attitude: attitude,
+            technicalExpertise: technicalExpertise,
+            codingSkills: codingSkills,
+            overAllScore: overAllScore,
+            weekNum: currentWeekNum + index,
+            year: new Date().getFullYear().toString(),
+            userId: userId
+        }));
+
+        const result = await Ratings.bulkCreate(ratingsData);
+        return result;
+}
 
 const createRating = async (
     teamPlay:number,
@@ -45,4 +74,4 @@ const updateRating = async (
     return result;
 }
 
-export { createRating, updateRating, getRatingByUserIdAndWeekNum };
+export { createRating, bulkCreateRating, updateRating, getRatingByUserIdAndWeekNum };
