@@ -11,6 +11,11 @@ const app = express()
 
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json())
+
+const userRouter = require('./routes/user.router');
+app.use('/api/user', userRouter);
+
 app.use(cookieSession({
     name: 'authSession',
     keys: ["test-project_mark1@CodingMart$"],
@@ -21,12 +26,9 @@ app.use(cors({
     origin: "http://localhost:5173",
     credentials: true  
 }))
-
-
+app.use(express.urlencoded({extended: true}))
 app.use(passport.initialize())
 app.use(passport.session());
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
 
 dbPool.getConnection((err:any,connection:any) => {
     if(err)throw err;
