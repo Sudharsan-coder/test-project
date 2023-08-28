@@ -41,7 +41,7 @@ export default function UpdateModal({ isOpen, handleOpenClose, row }:{ isOpen:bo
   const [attitude, setAttitude] = useState(row?.ratings[0].attitude ?? 0);
   const [technicalExpertise, setTechnicalExpertise] = useState(row?.ratings[0]?.technicalExpertise ?? 0);
   const [codingSkills, setCodingSkills] = useState(row?.ratings[0].codingSkills ?? 0);
-  const [overAllScore, setoverAllScore] = useState(Number(row.ratings[0].overAllScore));
+  const [overAllScore, setOverAllScore] = useState(Number(row.ratings[0].overAllScore));
 
   const handleClose = () => {
     handleOpenClose();
@@ -50,7 +50,6 @@ export default function UpdateModal({ isOpen, handleOpenClose, row }:{ isOpen:bo
   const navigate = useNavigate();
 
   const handleUpdate = async () => {
-    console.log(row);
     await Axios.post(`${BASE_URL}/api/rating/update`, {
       teamPlay: teamPlay,
       attitude: attitude,
@@ -206,8 +205,8 @@ export default function UpdateModal({ isOpen, handleOpenClose, row }:{ isOpen:bo
               id="outlined-basic" 
               label="Overall Score" 
               variant="outlined" 
-              value={overAllScore}
-              onChange={(event:any) => setoverAllScore(parseInt(event.target.value, 10))}
+              value={isNaN(overAllScore) ? 0 : overAllScore}
+              onChange={(event:any) => setOverAllScore(parseInt(event.target.value, 10))}
             />
           </FormControl>
           <Button
