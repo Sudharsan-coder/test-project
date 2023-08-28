@@ -120,9 +120,9 @@ export default function DataTable({ week, nameFilter, skillsFilter, phaseFilter 
   useEffect(() => {
     setFilteredData(
       [...data.filter((value:viewType) => {
-        return value.userName.startsWith(nameFilter);
+        return value.userName.toLowerCase().startsWith(nameFilter.toLowerCase());
       }).filter((value:viewType) => {
-        return (value.skills.skills.filter((skill:string) => skill.includes(skillsFilter)).length > 0 || skillsFilter === '' )
+        return (value.skills.skills.filter((skill:string) => skill.toLowerCase().includes(skillsFilter.toLowerCase())).length > 0 || skillsFilter === '' )
       }).filter((value:viewType) => {
         return value.skills.phase.includes(phaseFilter);
       })]
