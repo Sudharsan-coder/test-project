@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(cookieSession({
     name: 'authSession',
     keys: ["test-project_mark1@CodingMart$"],
-    maxAge: 30*60*100
+    maxAge: 24*60*60*100
 }))
 
 app.use(cors({
