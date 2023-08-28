@@ -130,7 +130,7 @@ export default function Home({ user }:{ user:{ userName:string, userImg:string, 
               renderInput={(params) => <TextField {...params} label="Phase" />}
             /> */}
             <FormControl sx={{ minWidth: 150 }} size="small">
-              <InputLabel id="demo-select-small-label">Select Week</InputLabel>
+              <InputLabel id="demo-select-small-label">Select Phase</InputLabel>
               <Select
                 labelId="demo-select-small-label"
                 id="demo-select-small"
