@@ -1,10 +1,9 @@
-import Axios from "axios";
-import { BASE_URL } from "../../constants";
-import { Box, TextField, Autocomplete, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { FormControl, Box, TextField, InputLabel, Select, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { ChangeEvent, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import AccountMenu from "../../components/AccountMenu";
 import DataTable from "../../components/DataTable";
+import * as AuthAPI from "../../api/AuthAPI";
 
 const weekData = [
   {
@@ -50,8 +49,8 @@ export default function Home({ user }:{ user:{ userName:string, userImg:string, 
   const [ phaseFilter, setPhaseFilter ] = useState('');
 
   const logout = () => {
-    Axios.get(`${BASE_URL}/auth/logout`, {withCredentials: true})
-    .then( () => { // (res) =>
+    AuthAPI.logout()
+    .then(() => { // (res) =>
       navigate('/login');
     })
   }

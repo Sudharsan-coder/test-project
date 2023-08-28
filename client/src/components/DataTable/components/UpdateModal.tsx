@@ -1,8 +1,10 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Rating, Select, TextField } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { BASE_URL } from '../../../constants';
 import Axios, { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import * as RatingAPI from '../../../api/RatingAPI';
+import * as SkillAPI from '../../../api/SkillAPI';
 
 type viewType = {
   id: number;
@@ -50,27 +52,26 @@ export default function UpdateModal({ isOpen, handleOpenClose, row }:{ isOpen:bo
   const navigate = useNavigate();
 
   const handleUpdate = async () => {
-    await Axios.post(`${BASE_URL}/api/rating/update`, {
-      teamPlay: teamPlay,
-      attitude: attitude,
-      technicalExpertise: technicalExpertise,
-      codingSkills: codingSkills,
-      overAllScore: overAllScore,
-      userId: row.id,
-      weekNum: row.ratings[0].weekNum
-    }, { withCredentials: true })
-    .then((res:AxiosResponse) => {
+    // update in Ratings Table
+    await RatingAPI.update(
+      teamPlay,
+      attitude,
+      technicalExpertise,
+      codingSkills,
+      overAllScore,
+      row.id,
+      row.ratings[0].weekNum
+    ).then((res:AxiosResponse) => {
       console.log(res);
     }).catch((err:any) => {
       console.log(err);
     });
-    const newSkills = skills.split(',').filter((skills:string) => skills !== ',' && skills.trim().length > 0);
-    await Axios.post(`${BASE_URL}/api/skill/update`, {
-      skills: newSkills,
-      phase: phase,
-      userId: row.id
-    }, { withCredentials: true })
-    .then((res:AxiosResponse) => {
+    // Update in Skills Table
+    await SkillAPI.update(
+      skills.split(',').filter((skills:string) => skills !== ',' && skills.trim().length > 0 ),
+      phase,
+      row.id
+    ).then((res:AxiosResponse) => {
       console.log(res);
     }).catch((err:any) => {
       console.log(err);

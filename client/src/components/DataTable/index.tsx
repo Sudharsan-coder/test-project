@@ -4,48 +4,12 @@ import { MouseEvent, useState, useEffect } from "react";
 import { BASE_URL } from "../../constants";
 import Axios from 'axios';
 import UpdateModal from "./components/UpdateModal";
-
-// type rowType = {
-//   sno:number;
-//   name:string;
-//   skill:Array<string>;
-//   phase:string;
-//   teamPlay:number;
-//   attitude:number;
-//   expertise:number;
-//   codingSkills:number;
-//   overallScore:number;
-// }
+import * as UserAPI from '../../api/UserAPI';
 
 type weekOption = {
   weekNum: number;
   weekName: string;
 }
-
-// const mockData = [
-//   {
-//     sno: 1,
-//     name: "Jeyavishnu S",
-//     skill: ["ReactJS","NextJS"],
-//     phase: "Intern",
-//     teamPlay: 4,
-//     attitude: 5,
-//     expertise: 5,
-//     codingSkills: 5,
-//     overallScore: 5
-//   },
-//   {
-//     sno: 1,
-//     name: "Jeyavishnu S",
-//     skill: ["ReactJS","NextJS"],
-//     phase: "Intern",
-//     teamPlay: 4,
-//     attitude: 5,
-//     expertise: 5,
-//     codingSkills: 5,
-//     overallScore: 5
-//   }
-// ];
 
 type viewType = {
   id: number;
@@ -111,7 +75,7 @@ export default function DataTable({ week, nameFilter, skillsFilter, phaseFilter 
   }
 
   useEffect(() => {
-    Axios.get(`${BASE_URL}/api/user/view/${week}`, { withCredentials: true })
+    UserAPI.getView(week)
     .then((res:any) => {
       setData([...res.data.data]);
     })

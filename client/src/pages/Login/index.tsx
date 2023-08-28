@@ -4,6 +4,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../constants.ts';
 import Axios from 'axios';
+import * as AuthAPI from '../../api/AuthAPI'
 
 export default function Login() {
 
@@ -14,9 +15,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    Axios.get(`${BASE_URL}/auth/login/success`, {
-      withCredentials: true,
-    })
+    AuthAPI.success()
     .then((res) => {
       if (res.status == 200) {
         navigate('/');
