@@ -14,7 +14,7 @@ const bulkCreateRating = async (
     ) => {
         const currentWeekNum = 32;
 
-        const nextWeeksNum = Array.from({length: 10},(i, index)=> currentWeekNum + index);
+        //const nextWeeksNum = Array.from({length: 10},(i, index)=> currentWeekNum + index);
 
         const ratingsData = new Array(10).fill(0).map( ( item, index) => ({
             teamPlay: teamPlay,
