@@ -11,7 +11,7 @@ export default function SkillsList({ skillsList }:{ skillsList:Array<string> }) 
         gap:'10px'
       }}
     >
-      {skillsList.map((skill : string) => {
+      {skillsList.length > 0 && skillsList.map((skill : string) => {
         return <Chip key={crypto.randomUUID()} size="small" label={skill}/>
       })}
     </Box> 

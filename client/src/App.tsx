@@ -21,8 +21,8 @@ function App() {
         if (res.status == 200) {
           setUser({
             userName: res.data.user[0],
-            userEmail: res.data.user[2],
-            userImg: res.data.user[1]
+            userEmail: res.data.user[1],
+            userImg: res.data.user[2]
           })
         } else {
           console.log("No status");
