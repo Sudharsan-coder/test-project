@@ -3,6 +3,7 @@ import { error } from "console";
 const table = require('../models');
 
 const Users = table.Users;
+const Ratings = table.Ratings;
 
 const createUser = async (userName:string, googleId:string, userImg:string, userEmail:string) => {
     if(!userName || !googleId || !userImg || !userEmail){
@@ -63,16 +64,42 @@ const getUserView = async ( weekNum:number ) => {
         include: [{
             model: table.Ratings,
             as: 'ratings',
-            where: {weekNum: weekNum}
+            where: {weekNum: weekNum},
+            required: false
         },
         {
             model: table.Skills,
             as: 'skills'
         }]
     });
-    console.log(JSON.stringify(result, null, 2));
+    console.log("getUserView"+ JSON.stringify(result, null, 2));
     return result;
 }
+
+// const getUserView = async ( weekNum:number ) => {
+
+//     const userIds = await Ratings.findAll({
+//         attributes: ['userId'],
+//         where: {weekNum: weekNum}
+//     })
+//     console.log("userIds"+ JSON.stringify(userIds, null, 2));
+
+//     const userIdsArray = userIds.map((userId:any) => userId.userId)
+    
+//     const result = await Users.findAll({
+//         where: {id: userIdsArray},
+//         include: [{
+//             model: table.Ratings,
+//             as: 'ratings',
+//         },
+//         {
+//             model: table.Skills,
+//             as: 'skills'
+//         }]
+//     });
+//     console.log("getUserView"+ JSON.stringify(result, null, 2));
+//     return result;
+// }
 
 export { getAllUsers, createUser, getUserById, getUserByGoogleId, updateUser, getUserView };
 
