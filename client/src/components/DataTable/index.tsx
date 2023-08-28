@@ -120,9 +120,11 @@ export default function DataTable({ week, nameFilter, skillsFilter, phaseFilter 
   useEffect(() => {
     setFilteredData(
       [...data.filter((value:viewType) => {
-        return value.userName.includes(nameFilter) &&
-              value.skills.skills.filter((skill:string) => skill.includes(skillsFilter)).length > 0 &&
-              value.skills.phase.includes(phaseFilter);
+        return value.userName.startsWith(nameFilter);
+      }).filter((value:viewType) => {
+        return (value.skills.skills.filter((skill:string) => skill.includes(skillsFilter)).length > 0 || skillsFilter === '' )
+      }).filter((value:viewType) => {
+        return value.skills.phase.includes(phaseFilter);
       })]
     );
   }, [data, nameFilter, skillsFilter, phaseFilter])
@@ -165,7 +167,7 @@ export default function DataTable({ week, nameFilter, skillsFilter, phaseFilter 
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.length > 0 && data.slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage).map((row:viewType, index:number) => (
+            {filteredData && filteredData.slice(page*rowsPerPage, page*rowsPerPage+rowsPerPage).map((row:viewType, index:number) => (
               <TableRow key={crypto.randomUUID()}>
                 <TableCell>{index+1}</TableCell>
                 <TableCell>{row?.userName}</TableCell>

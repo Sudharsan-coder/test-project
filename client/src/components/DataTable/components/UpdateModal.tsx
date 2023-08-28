@@ -65,8 +65,9 @@ export default function UpdateModal({ isOpen, handleOpenClose, row }:{ isOpen:bo
     }).catch((err:any) => {
       console.log(err);
     });
+    const newSkills = skills.split(',').filter((skills:string) => skills !== ',' && skills.trim().length > 0);
     await Axios.post(`${BASE_URL}/api/skill/update`, {
-      skills: skills.split(','),
+      skills: newSkills,
       phase: phase,
       userId: row.id
     }, { withCredentials: true })
