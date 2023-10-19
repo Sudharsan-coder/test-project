@@ -5,8 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/app.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jeyavishnu S, Yokesh G",
@@ -18,8 +17,6 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
     "mysql2": "^3.6.0",
-    "passport": "^0.5.3",
-    "passport-google-oauth20": "^2.0.0",
     "sequelize": "^6.32.1"
   },
   "devDependencies": {
@@ -29,9 +26,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mysql": "^2.15.21",
     "@types/node": "^20.5.6",
-    "@types/passport": "^1.0.12",
     "concurrently": "^8.2.1",
-    "nodemon": "^3.0.1",
-    "typescript": "^5.2.2"
+    "nodemon": "^3.0.1"
   }
 }
